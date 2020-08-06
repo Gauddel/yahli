@@ -1,0 +1,47 @@
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@opengsn/gsn": "^0.10.0",
+    "@truffle/contract": "^4.2.15",
+    "autoprefixer": "^9.8.6",
+    "bl": "^4.0.2",
+    "crypto-js": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "eth-ecies": "^1.0.5",
+    "ethereumjs-abi": "^0.6.8",
+    "ipfs-api": "1.0.1-2",
+    "ipfs-http-client": "^45.0.0",
+    "ipfsecret": "^0.1.5",
+    "postcss-cli": "^7.1.1",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "react-scripts": "^3.4.1",
+    "tailwindcss": "^1.6.0",
+    "web3": "1.0.0-beta.37"
+  },
+  "scripts": {
+    "css-build": "postcss ./src/sass/style.css -o ./src/index.css && postcss ./src/sass/style.css ./src/index.css --watch",
+    "css-watch": "npm run css-build",
+    "start": "react-scripts start && npm run css-build ",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
