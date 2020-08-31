@@ -1,94 +1,132 @@
-pragma solidity 0.6.2;
+pragma solidity ^0.6.2;
 pragma experimental ABIEncoderV2;
 
 import "@opengsn/gsn/contracts/BaseRelayRecipient.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+enum State {
+    None,
+    Created,
+    SignPending,
+    Signed
+}
 
 struct Document {
     string cid;
     address owner;
-    address[] oldsSignees;
     address newSignee;
-    string secret;
+    State state;
+    mapping(address => string) secrets;
 }
-
-// 0xb75D851adD1044685Bc91ecfD2e6DE1C6034267D Contract Address.
-// Use openzeppelin framework for safety
 
 contract SignDocuTest is BaseRelayRecipient {
 
+    using SafeMath for uint256;
+
     enum Action {
         Create,
-        Sign
+        Approve,
+        Sign,
+        AccountCreation
     }
 
-    mapping(string => Document) documents;
+    // Ownable
+
+    address private _owner;
+    address private  paymaster;
+
+    // Ownable
+
+    // Balances for Gas station network
+
+    mapping(address => uint256) balances;
+
+    // Balances for Gas station network
+
+    mapping(string => Document) public documents;
     mapping(string => bool) documentsExist;
+    mapping(address => string) public accounts; // need to encrypt the secret with the counterparty dapp pubKey
 
     mapping(address => string[]) creators;
-    mapping(address => string[]) signedDocuments;
+    mapping(address => string[]) documentsBySignee;
 
     event Signature(string cid, address signee);
     event DocumentCreated(string cid, address creator);
 
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
     constructor(address _forwarder) public {
         trustedForwarder = _forwarder;
+
+        // Ownable
+        address msgSender = _msgSender();
+        _owner = msgSender;
+        emit OwnershipTransferred(address(0), msgSender);
     }
 
     function documentIsSigned(string memory _cid, address _signee) public view returns(bool) {
-        Document memory document = getDocument(_cid);
-
-        for(uint i=0; i <  document.oldsSignees.length; i++) {
-            if (document.oldsSignees[i] == _signee) {
-                return true;
-            }
-        }
-
-        return false;
+        return documents[_cid].state == State.Signed;
     }
 
-    // function createAndApproveDocument(string memory _cid, address _signee, string memory _secret, address _sender) public {
-    //     createDocument(_cid, _secret, _sender);
-    //     approveToSign(_cid, _signee);
-    // }
+    function createAccount(address _sender, string memory _accountPubKey, bytes memory _signature) public isAccountDontExist(_sender) {
+        require(isValidAccountCreation(_sender, _accountPubKey, _signature), 'Signature is not valid.');
 
-    function createDocument(string memory _cid, string memory _secret, address _sender, bytes memory _signature) public documentDontExist(_cid) {
+        accounts[_sender] = _accountPubKey;
+    }
+
+    function createDocument(string memory _cid, string memory _secret, address _sender, bytes memory _signature) public documentDontExist(_cid) isAccountExist(_sender) {
         require(isValidCreationDocumentSignature(_cid, _secret, _sender, _signature), 'Signature is not valid.');
 
-        documents[_cid] = Document({cid : _cid, owner : _sender, oldsSignees : new address[](100), newSignee : address(0x00), secret : _secret});
+        documents[_cid] = Document({cid : _cid, owner : _sender, newSignee : address(0x00), state : State.Created});
+        documents[_cid].secrets[_sender] = _secret;
         documentsExist[_cid] = true;
         creators[_sender].push(_cid);
 
         emit DocumentCreated(_cid, _sender);
     }
 
-    function sign(string memory _cid, address _sender, bytes memory _signature) public documentExist(_cid) {
+    function sign(string memory _cid, string memory _secret, address _sender, bytes memory _signature) public documentExist(_cid) {
+        require(isValidSignSignature(_cid, _secret, _sender, _signature), 'Signature is not valid.');
+
         Document storage document = documents[_cid];
         
         require(document.newSignee == _sender, "Only the assign signee by the owner can sign the document.");
 
-        signedDocuments[_sender].push(_cid);
-        document.oldsSignees.push(_sender);
+        document.state = State.Signed;
     }
 
-    function approveToSign(string memory _cid, address _newSignee) public documentExist(_cid) onlyOwner(_cid){
+    function approveToSign(string memory _cid, address _sender, address _newSignee, string memory _secret, bytes memory _signature) public documentExist(_cid) onlyDocumentOwner(_cid, _sender) isAccountExist(_newSignee) {
+        require(isValidApproveSignature(_cid, _sender, _newSignee, _secret, _signature), 'Signature is not valid.');
+        
         Document storage document = documents[_cid];
-        document.newSignee = _newSignee;
-    }
 
-    function getSignedDocument() public view returns(string[] memory) {
-        return signedDocuments[msg.sender];
+        require(document.state != State.SignPending, 'Cannot ask for another signature if the last signee didn t sign the document.');
+
+        document.newSignee = _newSignee;
+        document.secrets[_newSignee] = _secret;
+        document.state = State.SignPending;
+        documentsBySignee[_newSignee].push(_cid);
     }
 
     function getCreatedDocument() public view returns(string[] memory) {
         return creators[msg.sender];
     }
 
-    function getDocument(string memory _cid) public view returns(Document memory) {
-        return documents[_cid];
+    function getDocuments() public view returns(string[] memory) {
+        return documentsBySignee[msg.sender];
     }
 
-    function transferOwnership(string memory _cid, address _newOwner) public view onlyOwner(_cid) {
-        Document memory document = getDocument(_cid);
+    function getSigneeSecret(string memory _cid) public view returns(string memory) {
+        return documents[_cid].secrets[msg.sender];
+    }
+
+    function getDocumentOwner(string memory _cid) public view returns(address) {
+        return documents[_cid].owner;
+    }
+
+    function transferOwnership(string memory _cid, address _sender, address _newOwner) public view onlyDocumentOwner(_cid, _sender) {
+        Document memory document = documents[_cid];
         document.owner = _newOwner;
     }
 
@@ -102,16 +140,47 @@ contract SignDocuTest is BaseRelayRecipient {
         _;
     }
 
-    modifier onlyOwner(string memory _cid) {
-        require(documents[_cid].owner == msg.sender, "Only the owner of the document can transfer ownership.");
+    modifier onlyDocumentOwner(string memory _cid, address _sender) {
+        require(documents[_cid].owner == _sender, "Only the owner of the document can do this action.");
         _;
     }
+
+    modifier isAccountExist(address _sender) {
+        require(keccak256(abi.encodePacked(accounts[_sender])) != keccak256(abi.encodePacked("")), "Account didn't exist.");
+        _;
+    }
+
+    modifier isAccountDontExist(address _sender) {
+        require(keccak256(abi.encodePacked(accounts[_sender])) == keccak256(abi.encodePacked("")), "Account already exist.");
+        _;
+    }
+
+    // Create Account
+
+    function isValidAccountCreation(address _sender, string memory _accountPubKey, bytes memory _signature) public view returns(bool) {
+        bytes32 message = prefixed(keccak256(abi.encodePacked(_sender, _accountPubKey, uint(Action.AccountCreation), address(this))));
+        
+        return recoverSigner(message, _signature) == _sender;
+    }
+
+    // Create Account
+
+    // Approve for signing
+
+    function isValidApproveSignature(string memory _cid, address _sender, address _newSignee, string memory _secret, bytes memory _signature)
+    public view returns(bool) {
+        bytes32 message = prefixed(keccak256(abi.encodePacked(_cid, _sender, _newSignee, _secret, uint(Action.Approve), address(this))));
+        
+        return recoverSigner(message, _signature) == _sender;
+    }
+
+    // Approve for signing
 
     // Sign Document
 
     function isValidSignSignature(string memory _cid, string memory _secret, address _sender, bytes memory _signature)
     public view returns(bool) {
-        bytes32 message = prefixed(keccak256(abi.encodePacked(_cid, _secret, _sender, uint(Action.Create), address(this))));
+        bytes32 message = prefixed(keccak256(abi.encodePacked(_cid, _secret, _sender, uint(Action.Sign), address(this))));
         
         return recoverSigner(message, _signature) == _sender;
     }
@@ -164,4 +233,79 @@ contract SignDocuTest is BaseRelayRecipient {
     }
 
     // Signature Part
+
+    // Gas Station 
+
+    function getBalance(address _account) public view returns(uint256) {
+        return balances[_account];
+    }
+
+    function sendPayement() public payable {
+        balances[msg.sender] = balances[msg.sender] + msg.value;
+    }
+
+    function transactionWillExecute(string memory _cid, uint256 _gasEstimate, uint256 _gasPrice) public view returns(bool) {
+        return balances[getDocumentOwner(_cid)] > _gasPrice.mul(_gasEstimate);
+    }
+
+    function setPaymaster(address _paymaster) public onlyOwner() {
+        paymaster = _paymaster;
+    }
+
+    function getFeeByPaymaster(uint256 _fee) public onlyPaymaster() {
+        msg.sender.transfer(_fee);
+    }
+
+    modifier onlyPaymaster() {
+        require(paymaster == msg.sender, "");
+        _;
+    }
+
+    // Gas Station
+
+    // Ownable
+
+    /**
+     * @dev Returns the address of the current owner.
+     */
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(_owner == _msgSender(), "Ownable: caller is not the owner");
+        _;
+    }
+
+    /**
+     * @dev Leaves the contract without owner. It will not be possible to call
+     * `onlyOwner` functions anymore. Can only be called by the current owner.
+     *
+     * NOTE: Renouncing ownership will leave the contract without an owner,
+     * thereby removing any functionality that is only available to the owner.
+     */
+    function renounceOwnership() public virtual onlyOwner {
+        emit OwnershipTransferred(_owner, address(0));
+        _owner = address(0);
+    }
+
+    /**
+     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * Can only be called by the current owner.
+     */
+    function transferOwnership(address newOwner) public virtual onlyOwner {
+        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        emit OwnershipTransferred(_owner, newOwner);
+        _owner = newOwner;
+    }
+
+    function _msgData() internal view virtual returns (bytes memory) {
+        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
+        return msg.data;
+    }
+
+    // Ownable
 }

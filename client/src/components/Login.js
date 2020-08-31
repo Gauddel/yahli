@@ -7,11 +7,13 @@ class Login extends React.Component {
         this.state = {
             userId : '',
             password : '',
+            loading : false,
         }
-
+        
         this.login = this.login.bind(this);
         this.handlerUserId = this.handlerUserId.bind(this);
         this.handlerPassword = this.handlerPassword.bind(this);
+        this.loginToEthereumNetworkConnexionProvider = this.loginToEthereumNetworkConnexionProvider.bind(this);
     }
 
     handlerUserId(event) {
@@ -32,10 +34,10 @@ class Login extends React.Component {
         var alert = '';
 
         if (!this.notAll(this.state.userId)) {
-            alert = alert.concat('user name not correct. ');
+            alert = alert.concat('user name not correct.');
         }
         if (!this.notAll(this.state.password)) {
-            alert = alert.concat('user password not correct. ');
+            alert = alert.concat('user password not correct.');
         }
 
         if(alert !== '') {
@@ -43,8 +45,21 @@ class Login extends React.Component {
             return;
         }
 
-        const load =  Web3Services.GetInstance().web3.eth.accounts.wallet.load(this.state.password);
-        this.props.connect(load[0].address);
+        Web3Services.GetInstance();
+        setTimeout(this.loginToEthereumNetworkConnexionProvider, 1000);
+    }
+
+    async loginToEthereumNetworkConnexionProvider() {
+        if(Web3Services.GetInstance().web3 === undefined) {
+            this.setState({
+                loading : true,
+            })
+            this.forceUpdate();
+            setTimeout(this.loginToEthereumNetworkConnexionProvider, 1000);
+        }
+        Web3Services.GetInstance().web3.eth.getAccounts().then(accounts => {
+            this.props.connect(accounts[0]);
+        })
     }
 
     notAll(value) {
@@ -74,7 +89,7 @@ class Login extends React.Component {
 
     render() {
         return (<div>
-            <div className="flex justify-center mt-10" >
+            {/* <div className="flex justify-center mt-10" >
                 <div className="flex w-2/5 min-w-md rounded overflow-hidden shadow-xl">
                     <div className="min-w-full px-5">
                         <label className="px-2 min-w-full text-blue-600 flex items-center justify-start text-2xl mb-2">User Identification</label>
@@ -86,7 +101,7 @@ class Login extends React.Component {
                         </div>
                     </div>             
                 </div>
-            </div>
+            </div> */}
         </div>)
     }
 }

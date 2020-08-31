@@ -32,7 +32,7 @@ class UploadDocument extends React.Component {
         reader.onloadend = () => {
             var wordArray = CryptoJS.lib.WordArray.create(reader.result);          
             //var wordArray = CryptoJS.enc.Utf8.parse(reader.result);          
-             // Convert: ArrayBuffer -> WordArray
+            // Convert: ArrayBuffer -> WordArray
             //console.log(reader.result);
             console.log(wordArray.toString(CryptoJS.enc.Base64));
             var encrypted = CryptoJS.AES.encrypt(wordArray, 'password').toString();

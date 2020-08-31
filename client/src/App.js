@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
-import Web3Services from './services/Web3Services';
-import DownloadDocument from "./components/DownloadDocument";
-import UploadDocument from "./components/UploadDocument";
 import Body from "./components/Body";
 import Header from "./components/Header";
 
@@ -19,23 +15,22 @@ class App extends Component {
     this.state = {
       isHome : true,
       isConnected : false,
-      isSignup : false,
-      isLogin : false,
-      isCorporate : false,
-      isPayment : false,
+      isSigning : false,
+      isDocument : false,
+      isPayement : false,
       amount : 0,
-      account : ''
+      account : '',
+      balance : 0,
     }
-    Web3Services.GetInstance();
-    this.signup = this.signup.bind(this);
-    this.corporate = this.corporate.bind(this);
-    this.login = this.login.bind(this);
+
     this.home = this.home.bind(this);
-    this.payment = this.payment.bind(this);
     this.connect = this.connect.bind(this);
     this.disconnect = this.disconnect.bind(this);
+    this.documents = this.documents.bind(this);
+    this.signing = this.signing.bind(this);
+    this.payement = this.payement.bind(this);
+    this.updateBalance = this.updateBalance.bind(this);
   }
-
 
   componentDidMount = async () => {
   };
@@ -43,74 +38,41 @@ class App extends Component {
   runExample = async () => {
   };
 
-  payment(amount) {
+  payement() {
     this.setState({
-      isSignup : false,
-      isCorporate : false,
-      isLogin : false,
       isHome : false,
-      isConnected : false,
-      isPayment :  true,
-      amount : amount
-    })
-  }
-
-  signup() {
-    this.setState({
-      isSignup : true,
-      isCorporate : false,
-      isLogin : false,
-      isHome : false,
-      isConnected : false,
-      isPayment :  false,
-      amount : 0
-    })
-  }
-
-  corporate() {
-    this.setState({
-      isCorporate : true,
-      isSignup : false,
-      isLogin : false,
-      isHome : false,
-      isConnected : false,
-      isPayment :  false,
-      amount : 0
-    })
-  }
-
-  login() {
-    this.setState({
-      isCorporate : false,
-      isSignup : false,
-      isLogin : true,
-      isHome : false,
-      isConnected : false,
-      isPayment :  false,
-      amount : 0
+      isConnected : true,
+      isSigning : false,
+      isDocument : false,
+      isPayement : true,
+      amount : 0,
     })
   }
 
   home() {
     this.setState({
-      isCorporate : false,
-      isSignup : false,
-      isLogin : false,
       isHome : true,
       isConnected : false,
-      isPayment :  false,
+      isSigning : false,
+      isDocument : false,
+      isPayement : true,
       amount : 0
+    })
+  }
+
+  updateBalance(newBalance) {
+    this.setState({
+      balance : newBalance
     })
   }
 
   connect(account) {
     this.setState({
-      isCorporate : false,
-      isSignup : false,
-      isLogin : false,
-      isHome : false,
+      isHome : true,
       isConnected : true,
-      isPayment :  false,
+      isSigning : false,
+      isDocument : false,
+      isPayement : false,
       amount : 0,
       account : account
     })
@@ -118,23 +80,44 @@ class App extends Component {
 
   disconnect() {
     this.setState({
-      isCorporate : false,
-      isSignup : false,
-      isLogin : false,
       isHome : true,
       isConnected : false,
-      isPayment :  false,
+      isSigning : false,
+      isDocument : false,
+      isPayement : false,
       amount : 0,
       account : ''
+    })
+  }
+
+  documents() {
+    this.setState({
+      isHome : false,
+      isConnected : true,
+      isSigning : false,
+      isDocument : true,
+      isPayement : false,
+      amount : 0,
+    })
+  }
+
+  signing() {
+    this.setState({
+      isHome : false,
+      isConnected : true,
+      isSigning : true,
+      isDocument : false,
+      isPayement : false,
+      amount : 0,
     })
   }
 
   render() {
     return (<div>
           <div className="App min-h-full">
-            <Header isHome={this.state.isHome} isConnected={this.state.isConnected} account={this.state.account} disconnect={this.disconnect} home={this.home}  signup={this.signup} corporate={this.corporate} login={this.login}></Header>
+            <Header isHome={this.state.isHome} connect={this.connect} updateBalance={this.updateBalance} isConnected={this.state.isConnected} balance={this.state.balance} account={this.state.account} isSigning={this.state.isSigning} isPayement={this.state.isPayement} isDocuments={this.state.isDocument} signing={this.signing} document={this.documents} payement={this.payement} disconnect={this.disconnect} home={this.home}></Header>
           </div>
-          <Body amount={this.state.amount} connect={this.connect} isConnected={this.state.isConnected}  isHome={this.state.isHome} isLogin={this.state.isLogin} payment={this.payment} isPayment={this.state.isPayment} isSignup={this.state.isSignup} isCorporate={this.state.isCorporate}/>
+          <Body amount={this.state.amount} connect={this.connect} updateBalance={this.updateBalance} isConnected={this.state.isConnected} isSigning={this.state.isSigning} account={this.state.account} isDocument={this.state.isDocument} isPayement={this.state.isPayement} isHome={this.state.isHome}/>
     </div>
     );
   }

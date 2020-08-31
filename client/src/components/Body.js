@@ -7,6 +7,8 @@ import Login from './Login';
 import Corporate from './Corporate';
 import Payment from './Payment';
 import Connected from './Connected';
+import Documents from './Documents';
+import SigneeDocuments from './SigneeDocuments';
 
 require('dotenv').config()
 
@@ -19,10 +21,8 @@ class Body extends React.Component {
 
         this.getBody = this.getBody.bind(this);
         this.getHome = this.getHome.bind(this);
-        this.getCorporate = this.getCorporate.bind(this);
-        this.getSignup = this.getSignup.bind(this);
-        this.getLogin = this.getLogin.bind(this);
-        this.getPayment = this.getPayment.bind(this);
+        this.getDocuments = this.getDocuments.bind(this);
+        this.getSigning = this.getSigning.bind(this);
     }
 
     getHome() {
@@ -81,44 +81,34 @@ class Body extends React.Component {
     </div>);
     }
 
-    getCorporate() {
-        return (<Corporate payment={this.props.payment}/>);
-    }
-
-    getSignup() {
-        return (<Signup connect={this.props.connect}/>);
-    }
-
-    getLogin() {
-        return (<Login connect={this.props.connect}/>);
-    }
-
-    getPayment() {
-        return  (<Payment amount={this.props.amount}/>);
-    }
-
     getConnect() {
         return (<Connected/>);
+    }
+
+    getDocuments() {
+        return (<Documents account={this.props.account}/>);
+    }
+
+    getSigning() {
+        return (<SigneeDocuments/>);
+    }
+
+    getPayement() {
+        return (<Corporate updateBalance={this.props.updateBalance}/>);
     }
 
     getBody() {
         if (this.props.isHome) {
             return this.getHome();
         }
-        if (this.props.isCorporate) {
-            return this.getCorporate();
+        if (this.props.isDocument) {
+            return this.getDocuments();
         }
-        if (this.props.isSignup) {
-            return this.getSignup();
+        if (this.props.isSigning) {
+            return this.getSigning();
         }
-        if (this.props.isLogin) {
-            return this.getLogin();
-        }
-        if(this.props.isPayment) {
-            return  this.getPayment();
-        }
-        if(this.props.isConnected) {
-            return this.getConnect();
+        if(this.props.isPayement) {
+            return this.getPayement();
         }
     }
 

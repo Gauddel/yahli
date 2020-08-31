@@ -60,60 +60,16 @@ class UploadDocument2 extends React.Component {
         }).catch((error) => {
             console.error(error);
         });
-        // , (error, result) => {
-        //     if(error) {
-        //         console.error(error);
-        //         return;
-        //     }
-        //     this.setState({
-        //         ipfsHash : result[0].hash,
-        //     })
-        // }
-        // var xmlHttp = null;
-        // xmlHttp = new XMLHttpRequest();
-        // xmlHttp.open( "GET",  "https://ipfs.io/ipfs/QmQfiU9f8d3jLBBrP4RYtVugL873voUPBEKB2RngUg1Xwm");
-        // xmlHttp.responseType = "blob";
-        // xmlHttp.onload = function (e) {
-        //     console.log(xmlHttp.response);
-        //     var blob = new Blob([xmlHttp.response], {type: "application/pdf"});
-        //     var url = URL.createObjectURL(blob);
-        //     console.log(url)
-        //     //window.open(url)
-        // }
-        // xmlHttp.send();
-        // var file = new window.FileReader();
-        // file.onload = () => {
-        //     var bb = new Blob([file.result], {type: "application/pdf"});
-        //     var urlBb = URL.createObjectURL(bb);
-        //     console.log(urlBb);
-        //     //window.open(urlBb)
-        // }
-        // file.readAsText(new Blob([xmlHttp.response]));
-        // this.setState({
-        //     test : file.result
-        // })
-        // console.log(file)
     }
     getDoc() {
-        //var data = null;
         var fct = async (hash) => {for await (const f of Ipfs.GetInstance().IPFS.get(hash)) {
-            //console.log(f.path)
 
             const content = new BufferList()
             for await (const chunk of f.content) {
                 content.append(chunk)
             }
-
-            // (new Blob([content._bufs])).arrayBuffer().then(res => {
-            //     var decrypt = CryptoJS.AES.decrypt(res, 'password');
-            //     console.log(decrypt);
-
-            // })
-
-            //console.log(content.toString());
             var decrypt = CryptoJS.AES.decrypt(content.toString(), 'password');
-            //console.log(decrypt);
-            //console.log(CryptoJS.enc.Utf8);
+
             var result = decrypt.toString(CryptoJS.enc.Base64);
             var result2 = new ArrayBuffer(decrypt);
             this.setState({
@@ -134,16 +90,11 @@ class UploadDocument2 extends React.Component {
             return;
         }
 
-        //var data = null;
         console.log(this.state.data, 'TEST');
 
         return (
             <div>
-
-        {/* <embed src={"https://ipfs.io/ipfs/".concat(this.state.ipfsHash)} width="800px" height="2100px"/> */}
-            {/* <embed src={`data:application/pdf;base64,${this.state.data}`} width="800px" height="2100px"/> */}
-            <iframe src={`data:application/pdf;base64,${this.state.data}`} width="800px" height="2100px"/>
-        {/* <p id="test"></p> */}
+                <iframe src={`data:application/pdf;base64,${this.state.data}`} width="800px" height="2100px"/>
             </div>
         )
     }

@@ -16,8 +16,14 @@ class Web3Services {
     }
 
     constructor() {
-        this.web3 = new Web3(new Web3.providers.HttpProvider(infuraLink));
-        console.log(this.web3)
+        window.ethereum.enable().then(() => {
+            this.web3 = new Web3(window.ethereum);
+            // console.log(this.web3.currentProvider);
+            // this.web3.currentProvider._handleAccountsChanged =  (accounts) => {
+            //     console.log(accounts);
+            //     console.log('test');
+            // }
+        })
     }
 
     setProvider(provider) {

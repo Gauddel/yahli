@@ -1,0 +1,104 @@
+{
+  "contractName": "Ownable",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.2+commit.bacdbe57\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/mariejoseph/Documents/HackFS/IPFS/contracts/Ownable.sol\":\"Ownable\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/mariejoseph/Documents/HackFS/IPFS/contracts/Ownable.sol\":{\"keccak256\":\"0xe92428928af61158fd70e95c324496bf80426a37c29dc94f3b9189d23d0a95ca\",\"urls\":[\"bzz-raw://cac8c3d06196dea130f0b6e1cf6d129d79b1898548ae3f0b0fa88dbede9a0b7b\",\"dweb:/ipfs/QmctKeqsMCVktv5nAVg1ksE9iTmzMb3NQTmU7paVMmoEuc\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity 0.6.2;\n\nabstract contract Ownable {\n\n}",
+  "sourcePath": "/Users/mariejoseph/Documents/HackFS/IPFS/contracts/Ownable.sol",
+  "ast": {
+    "absolutePath": "/Users/mariejoseph/Documents/HackFS/IPFS/contracts/Ownable.sol",
+    "exportedSymbols": {
+      "Ownable": [
+        39
+      ]
+    },
+    "id": 40,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 38,
+        "literals": [
+          "solidity",
+          "0.6",
+          ".2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:22:1"
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 39,
+        "linearizedBaseContracts": [
+          39
+        ],
+        "name": "Ownable",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 40,
+        "src": "24:30:1"
+      }
+    ],
+    "src": "0:54:1"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/mariejoseph/Documents/HackFS/IPFS/contracts/Ownable.sol",
+    "exportedSymbols": {
+      "Ownable": [
+        39
+      ]
+    },
+    "id": 40,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 38,
+        "literals": [
+          "solidity",
+          "0.6",
+          ".2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:22:1"
+      },
+      {
+        "abstract": true,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 39,
+        "linearizedBaseContracts": [
+          39
+        ],
+        "name": "Ownable",
+        "nodeType": "ContractDefinition",
+        "nodes": [],
+        "scope": 40,
+        "src": "24:30:1"
+      }
+    ],
+    "src": "0:54:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.2+commit.bacdbe57.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.2.0",
+  "updatedAt": "2020-08-21T16:13:47.340Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
