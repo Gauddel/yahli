@@ -1,4 +1,9 @@
 # Yahli
+
+<p align="center">
+  <img width="700" height="300" src="https://raw.githubusercontent.com/Gauddel/yahli/master/Yahli.jpeg">
+</p>
+
 ### Presentation
 Yahli is a dapp with whom you can sign document in a confidential and secure way using blockchain technologies.
 ### Technologies
@@ -45,7 +50,7 @@ chrome://extensions/
 and enable `developer mode` on chrome :
 
 <p align="center">
-  <img width="460" height="300" src="https://imag.malavida.com/qa-fs/enabling-the-developer-mode-in-chrome-42.jpg">
+  <img width="460" height="250" src="https://imag.malavida.com/qa-fs/enabling-the-developer-mode-in-chrome-42.jpg">
 </p>
 
 ### Encryption Plugin Installation
