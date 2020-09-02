@@ -69,5 +69,16 @@ snap serve
 
 ### Run Yahli dapp (Kovan)
 
+Download Yahli repo :
+```
+git clone https://github.com/Gauddel/yahli.git
+```
+
+Run Yahli :
+```
+cd client & yarn start
+```
+
+You can now test Yahli and Enjoy!!!
 
 
