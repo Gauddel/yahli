@@ -36,3 +36,9 @@ Run the project :
 ```
 yarn start
 ```
+
+Enable developer mode on chrome :
+
+<p align="center">
+  <img width="460" height="300" src="https://imag.malavida.com/qa-fs/enabling-the-developer-mode-in-chrome-42.jpg">
+</p>
