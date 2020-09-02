@@ -12,3 +12,27 @@ Yahli is a dapp with whom you can sign document in a confidential and secure way
 ### Smart Contract Pattern
 - [Proxy Delegate](https://fravoll.github.io/solidity-patterns/proxy_delegate.html) and [Eternal Storage](https://fravoll.github.io/solidity-patterns/eternal_storage.html) for upgradability.
 - [Check Effect Interaction](https://fravoll.github.io/solidity-patterns/checks_effects_interactions.html) and [Emergency Stop](https://fravoll.github.io/solidity-patterns/emergency_stop.html) for security.
+### Demo Video : 2 minutes
+## Install and run Yahli
+### Metamask Snaps Installation
+##### Requirements
+- Node v10.
+- Yarn
+##### Installation
+Metamask Snaps is an on developpment version of metamask enabling implementation of plugins inside it. 
+You can find Metamask snaps [here](https://github.com/MetaMask/metamask-snaps-beta).
+
+Download Metamask Snaps repo by typing :
+```
+git clone https://github.com/MetaMask/metamask-snaps-beta.git
+```
+
+Install dependencies and build the project :
+```
+yarn & yarn dist
+```
+
+Run the project :
+```
+yarn start
+```
