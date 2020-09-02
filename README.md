@@ -1,7 +1,7 @@
 # Yahli
 
 <p align="center">
-  <img width="700" height="300" src="https://raw.githubusercontent.com/Gauddel/yahli/master/Yahli.jpeg">
+  <img width="1000" height="300" src="https://raw.githubusercontent.com/Gauddel/yahli/master/Yahli.jpeg">
 </p>
 
 ### Presentation
