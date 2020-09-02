@@ -31,10 +31,19 @@ Download Metamask Snaps repo by typing :
 ```
 git clone https://github.com/MetaMask/metamask-snaps-beta.git
 ```
-
-Install dependencies and build the project :
+Go inside the downloaded repository :
 ```
-yarn & yarn dist
+cd metamask-snaps-beta
+```
+
+This beta version of metamask needs a specific version of NodeJs. Change NodeJS version by using [nvm](https://github.com/nvm-sh/nvm) :
+```
+nvm use 10
+```
+
+Install dependencies :
+```
+yarn
 ```
 
 Run the project :
@@ -42,7 +51,7 @@ Run the project :
 yarn start
 ```
 
-For activate this extensions, go to :
+For activating this extensions, go to :
 ```
 chrome://extensions/
 ```
@@ -79,9 +88,19 @@ Download Yahli repo :
 git clone https://github.com/Gauddel/yahli.git
 ```
 
-Run Yahli :
+Go to the front end application folder :
 ```
-cd client & yarn start
+cd yahli/client
+```
+
+Install the dependencies :
+```
+yarn
+```
+
+And Run the dapp :
+```
+yarn start
 ```
 
 You can now test Yahli and Enjoy!!!
