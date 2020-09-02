@@ -37,8 +37,37 @@ Run the project :
 yarn start
 ```
 
-Enable developer mode on chrome :
+For activate this extensions, go to :
+```
+chrome://extensions/
+```
+
+and enable `developer mode` on chrome :
 
 <p align="center">
   <img width="460" height="300" src="https://imag.malavida.com/qa-fs/enabling-the-developer-mode-in-chrome-42.jpg">
 </p>
+
+### Encryption Plugin Installation
+
+Encryption plugin is a metamask plugin used for asymmetric encryption of secret and encryption of document with this secret.
+
+Download Encryption plugin repo :
+```
+git clone https://github.com/Gauddel/encryption.git
+```
+
+Install snaps-cli :
+```
+npm install -g snaps-cli
+```
+
+Go to the `encryption` folder and run the plugin :
+```
+snap serve
+```
+
+### Run Yahli dapp (Kovan)
+
+
+
