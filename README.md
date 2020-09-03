@@ -84,7 +84,10 @@ Go to the `encryption` folder and install dependencies :
 ```
 yarn
 ```
-
+Build the plugin :
+```
+snap build
+```
 Finally run the plugin :
 ```
 snap serve
