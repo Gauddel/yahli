@@ -17,7 +17,9 @@ Yahli is a dapp with whom you can sign document in a confidential and secure way
 ### Smart Contract Pattern
 - [Proxy Delegate](https://fravoll.github.io/solidity-patterns/proxy_delegate.html) and [Eternal Storage](https://fravoll.github.io/solidity-patterns/eternal_storage.html) for upgradability.
 - [Check Effect Interaction](https://fravoll.github.io/solidity-patterns/checks_effects_interactions.html) and [Emergency Stop](https://fravoll.github.io/solidity-patterns/emergency_stop.html) for security.
-### Demo Video : 2 minutes
+### Installation video
+[![https://github.com/Gauddel/yahli/blob/master/Yahli.jpeg?raw=true](http://img.youtube.com/vi/JrkAjHiNXaA/0.jpg)](http://www.youtube.com/watch?v=JrkAjHiNXaA "Yahli Installation")
+### Demo Video
 ## Install and run Yahli
 ### Metamask Snaps Installation
 ##### Requirements
