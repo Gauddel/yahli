@@ -35,6 +35,10 @@ Go inside the downloaded repository :
 ```
 cd metamask-snaps-beta
 ```
+It seems that the most recent version of metamask snaps didn't handle plugin correctly, we will use metamask snaps at commit db5e24849af9e54ceb743de62c1458261815aece version :
+```
+git reset --hard db5e24849af9e54ceb743de62c1458261815aece
+```
 
 This beta version of metamask needs a specific version of NodeJs. Change NodeJS version by using [nvm](https://github.com/nvm-sh/nvm) :
 ```
@@ -76,7 +80,12 @@ Install snaps-cli :
 npm install -g snaps-cli
 ```
 
-Go to the `encryption` folder and run the plugin :
+Go to the `encryption` folder and install dependencies :
+```
+yarn
+```
+
+Finally run the plugin :
 ```
 snap serve
 ```
